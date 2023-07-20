@@ -13,16 +13,23 @@ condition_string = sys.argv[-1]
 # Gestion des erreurs 
 def handle_error(): 
     try:
-        if number_of_value <= 1 :
+        if number_of_value <= 2 :
             raise ValueError
     except (ValueError, IndexError):
         quit_program()
 
 # Fonctions
 def delete_if_condition(u_value, u_operator):
-    for i in range(len(u_value)):
-        u_value[i] = int(u_value[i]) + int(u_operator)
-    return u_value
+    new_array = []
+    for value in u_value :
+        check = 0
+        for char in value:
+            if char in u_operator:
+                check = 1
+                break               
+        if check != 1:
+            new_array.append(value)           
+    return new_array
 
 
 def quit_program():
@@ -33,4 +40,4 @@ handle_error()
 result= delete_if_condition(user_value, condition_string)
 
 # Affichage Résultat
-print(result)
+print(", ".join(result))
