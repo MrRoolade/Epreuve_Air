@@ -38,8 +38,8 @@ def mix_array_sorted(f_array, s_array):
         j+=1
     return new_array
 
-# def easy_mix_array_sorted(f_array, s_array):
-#     return sorted(f_array + s_array)
+def easy_mix_array_sorted(f_array, s_array):
+    return sorted(f_array + s_array)
 
 def quit_program():
     sys.exit("error")
