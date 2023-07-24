@@ -1,6 +1,7 @@
 #~~> MrRøølåÐe <~~#
-## Insertion dans un tableau trié
-### un programme qui ajoute à une liste d’entiers triée un nouvel entier tout en gardant la liste triée dans l’ordre croissant.
+## Mélanger deux tableaux triés
+
+### un programme qui fusionne deux listes d’entiers triées en les gardant triées, les deux listes seront séparées par un “fusion”.
 #### Le dernier argument est l’élément à ajouter.
 ##### Afficher error et quitter le programme en cas de problèmes d’arguments.
 
