@@ -10,12 +10,12 @@ user_value = "".join(sys.argv[1:])
 
 # Gestion des erreurs 
 def handle_error(): 
-    if len(sys.argv) < 2 :
+    if len(sys.argv) < 2 or not os.path.exists(user_value):
         quit_program()
 
 # Fonctions
 def read_file(u_value): 
-    with open(u_value, "r", encoding ="cp1252") as f:
+    with open(u_value, "r") as f:
         text = f.read()
         f.close
     return text
