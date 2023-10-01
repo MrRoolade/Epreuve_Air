@@ -7,8 +7,6 @@ import sys
 
 # Parsing
 user_value = sys.argv[1:]
-pattern = user_value[0]
-number_floor = user_value[1]
 
 # Gestion des erreurs 
 def handle_error(): 
@@ -32,6 +30,8 @@ def quit_program(message):
 
 # Résolution
 handle_error()
+pattern = user_value[0]
+number_floor = user_value[1]
 
 # Affichage Résultat
 make_pyramide(pattern , number_floor)
