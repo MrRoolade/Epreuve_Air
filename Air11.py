@@ -5,33 +5,34 @@
 
 import sys
 
-# Parsing
-user_value = sys.argv[1:]
+if __name__ == "__main__":
+    # Parsing
+    user_value = sys.argv[1:]
 
-# Gestion des erreurs 
-def handle_error(): 
-    try:
-        if len(sys.argv) != 3 or not user_value[1].isdigit():
+    # Gestion des erreurs 
+    def handle_error(): 
+        try:
+            if len(sys.argv) != 3 or not user_value[1].isdigit():
+                quit_program("error")
+        except (ValueError, IndexError):
             quit_program("error")
-    except (ValueError, IndexError):
-        quit_program("error")
 
-# Fonctions
-def make_pyramide(motif, number): 
-    number=int(number)
-    for i in range(1,number+1):
-        space = (number-i)*" "
-        block = (2*i-1)*motif
-        pyramid=(space+block)
-        print(pyramid)
+    # Fonctions
+    def make_pyramide(motif, number): 
+        number=int(number)
+        for i in range(1,number+1):
+            space = (number-i)*" "
+            block = (2*i-1)*motif
+            pyramid=(space+block)
+            print(pyramid)
 
-def quit_program(message):
-    sys.exit(message)   
+    def quit_program(message):
+        sys.exit(message)   
 
-# Résolution
-handle_error()
-pattern = user_value[0]
-number_floor = user_value[1]
+    # Résolution
+    handle_error()
+    pattern = user_value[0]
+    number_floor = user_value[1]
 
-# Affichage Résultat
-make_pyramide(pattern , number_floor)
+    # Affichage Résultat
+    make_pyramide(pattern , number_floor)

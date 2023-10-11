@@ -5,6 +5,20 @@
 
 import sys
 
+# Parsing
+user_value = sys.argv[1:]
+number_of_value = len(sys.argv)
+string_separateur=[' ', '\t', '\n']
+ 
+# Gestion des erreurs 
+def handle_error():
+    try:
+     if number_of_value != 1 :
+        raise ValueError
+    except (ValueError, IndexError):
+        quit_program()
+
+# Fonctions
 def split_function(user_value, string_separateur):
     word =''
     new_array = []
@@ -23,21 +37,9 @@ def split_function(user_value, string_separateur):
 def quit_program():
     sys.exit("error")
 
-# Parsing
-user_value = sys.argv[1:]
-number_of_value = len(sys.argv)
-string_separateur=[' ', '\t', '\n']
-  
-# Gestion des erreurs 
-try:
-   if number_of_value <= 1 :
-        raise ValueError
-except (ValueError, IndexError):
-        quit_program()
-
 # Résolution
 result= split_function(user_value , string_separateur)
 
 # Résultat
-for word in result:
-    print(word)
+for string in result:
+    print(string)

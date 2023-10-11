@@ -5,27 +5,28 @@
 
 import sys ,os.path
 
-# Parsing
-user_value = "".join(sys.argv[1:])
+if __name__ == "__main__":
+    # Parsing
+    user_value = "".join(sys.argv[1:])
 
-# Gestion des erreurs 
-def handle_error(): 
-    if len(sys.argv) < 2 or not os.path.exists(user_value):
-        quit_program()
+    # Gestion des erreurs 
+    def handle_error(): 
+        if len(sys.argv) < 2 or not os.path.exists(user_value):
+            quit_program()
 
-# Fonctions
-def read_file(u_value): 
-    with open(u_value, "r") as f:
-        text = f.read()
-        f.close
-    return text
+    # Fonctions
+    def read_file(u_value): 
+        with open(u_value, "r") as f:
+            text = f.read()
+            f.close
+        return text
 
-def quit_program():
-    sys.exit("error")   
+    def quit_program():
+        sys.exit("error")   
 
-# Résolution
-handle_error()
-result= read_file(user_value)
+    # Résolution
+    handle_error()
+    result= read_file(user_value)
 
-# Affichage Résultat
-print(result)
+    # Affichage Résultat
+    print(result)
