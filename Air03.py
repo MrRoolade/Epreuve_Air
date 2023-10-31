@@ -4,6 +4,7 @@
 ##### Afficher error et quitter le programme en cas de problèmes d’arguments.
 
 import sys
+import unittest
 
 # Parsing
 if __name__ == "__main__":
