@@ -32,4 +32,4 @@ if __name__ == "__main__":
     result= rotate_to_the_left(user_value)
 
     # Affichage Résultat
-    print(", ".join(result))
+    print(" ".join(result))

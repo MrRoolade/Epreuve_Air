@@ -24,7 +24,7 @@ if __name__ == "__main__":
         for value in u_value :
             check = 0
             for char in value:
-                if char in u_operator:
+                if char.upper() in u_operator or char.lower() in u_operator:
                     check = 1
                     break               
             if check != 1:

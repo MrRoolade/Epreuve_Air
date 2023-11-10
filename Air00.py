@@ -6,6 +6,7 @@
 import sys
 import unittest
 exercise = "Air00"
+
 string_separateur=[' ', '\t', '\n']
     
 # Gestion des erreurs 

@@ -53,4 +53,5 @@ if __name__ == "__main__":
     result= mix_array_sorted(first_array, second_array)
 
     # Affichage Résultat
-    print(result)
+    for value in result:
+        print(value, end=" ")

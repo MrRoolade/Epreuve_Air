@@ -1,89 +1,125 @@
 #~~> MrRøølåÐe <~~#
-## Le meta exo
-### Programme qui vérifie si les exercices de votre épreuve de l’air sont présents dans le répertoire et qu’ils fonctionnent (sauf celui là).
-#### Créez au moins un test pour chaque exercice.
-#### Afficher error et quitter le programme en cas de problèmes d’arguments.
+""" Le meta exo
+ Programme qui vérifie si les exercices de votre épreuve de l'air sont présents dans le répertoire et qu'ils fonctionnent (sauf celui là).
+ Créez au moins un test pour chaque exercice.
+ Afficher error et quitter le programme en cas de problèmes d'arguments"""
 
-import sys ,os.path
-import unittest
-import importlib.util   
+import subprocess
 
-# Parsing
-module_name = "Air"
-module_number = 0
-number_of_success = 0
-module_number_format = "{:02d}".format(module_number)
-module_name_complete = module_name + str(module_number_format)
+def generate_exercise_names(module_name, num_exercises):
+    return [f"{module_name}{num:02d}.py" for num in range(0,num_exercises)]
 
-while module_number !=13 :
-    i=1
-    class TestScript(unittest.TestCase):
-        script_path = module_name_complete+".py"
+def execute_test(arg):
+    process = subprocess.Popen(arg, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    output, error = process.communicate()
+    return output, error
 
-        def test_script_present(self):
-            # Vérifiez si le module est importable
-            i = 1
-            self.assertIsNotNone(importlib.util.find_spec(module_name_complete))
-            print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m')
+def compare_result(output, expected):
+    r1 = output
+    r2 = "\n".join(expected)
+    if isinstance(expected, str):
+        # Si la valeur attendue est une chaîne, compare sans tenir compte des espaces et des retours à la ligne
+        # print(f'{output.strip()}\n= = =\n{expected.strip()}')
+        return output.strip() == expected.strip()
+    elif isinstance(expected, list):
+        # print(f'{r1}->\n{r2}')
+        # Si la valeur attendue est une liste, compare les éléments après avoir joint avec des retours à la ligne
+        return output.strip() == "\n".join(expected)
+     
+def display_result(result: bool):
+    if result: 
+        print(f'\033[32mSUCCESS\033[0m')
+    else:
+        print(f'\033[31mFAILURE\033[0m')
 
-        def test_script_runs(self):
-            try:
-                i = 2
-                __import__(module_name_complete)
-                result = module_name_complete.split_function('Bonjour les gars', " ")
-                self.assertEqual(result, ['Bonjour', 'les', 'gars'])
-                print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m')
-                i = 3
-                result = module_name_complete.split_function('Bonjour les gars', "les")
-                self.assertEqual(result, ['Bonjour', 'les', 'gars'])
-                print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m')
-            except Exception as e:
-                self.fail(f"Le script '{self.script_path}' a rencontré une erreur lors de l'exécution : {e}")
-    module_number+=1
+def run_tests():
+    module_name = "Air"
+    exercises = generate_exercise_names(module_name, 13)
+    success_count = {}  
+    exercise_count = {} 
 
-    
+    input_exo = {
+        "00": (["Bonjour les gars"]),
+        "00_1": (["Bonjour les filles"]),
+        "01": (["Bonjour les gars", "les"]),
+        "01_1": (["Bonjour les filles", "les"]),
+        "02": (["je","teste", "des", "trucs", "/"]),
+        "02_1": (["je","suis", "chaud", "zzzzz!"]),
+        "03": (["1", "2", "3", "4", "5", "4", "3", "2", "1"]),
+        "03_1": (["monsieur", "fifou", "fifou", "michel", "michel"]),
+        "04": (["Hello milady,   bien ou quoi !!"]),
+        "04_1": (["Sallut, biieen !!"]),
+        "05": (["1", "2", "3", "4", "5", "+2"]),
+        "05_1": (["3", "4", "5", "-2"]),
+        "06": (["Michel", "Albert", "Thérèse", "Benoit", "t"]),
+        "07": (["10", "20", "30", "40", "50", "33"]),
+        "08": (["10", "20", "30", "fusion", "15", "25", "35"]),
+        "09": (["Michel", "Albert", "Benoît", "Bernadette"]),
+        "10": (["a.txt"]),
+        "11": (["O", "5"]),
+        "11_1": (["Y", "4"]),
+        "12": (["6", "5", "4", "3", "2", "1"]),
+        "12_1": (["15", "8", "74", "23", "42", "11"]),
+    }
+
+    output_exo = {
+        "00": (["Bonjour", "les", "gars"]),
+        "00_1": (["Bonjour", "les", "filles"]),
+        "01": (["Bonjour ", " gars"]),
+        "01_1": (["Bonjour ", " fil"]),
+        "02": ("je/teste/des/trucs"),
+        "02_1": ("jezzzzz!suiszzzzz!chaud"),
+        "03": ("5"),
+        "03_1": ("monsieur"),
+        "04": ("Helo milady, bien ou quoi !"),
+        "04_1": ("Salut, bien !"),
+        "05": ("3 4 5 6 7"),
+        "05_1": ("1 2 3"),
+        "06": ("Michel"),
+        "07": ("10 20 30 33 40 50"),
+        "08": ("10 15 20 25 30 35"),
+        "09": ("Albert Benoît Bernadette Michel"),
+        "10": ("Je danse le mia"),
+        "11": ("    O\n   OOO\n  OOOOO\n OOOOOOO\nOOOOOOOOO"),
+        "11_1": ("   Y\n  YYY\n YYYYY\nYYYYYYY"),
+        "12": ("1 2 3 4 5 6"),
+        "12_1": ("8 11 15 23 42 74"),
+    }
+
+    #compte le nombre de test par exercice
+    for num in output_exo.keys():
+        num = num[:2]
+        if num in exercise_count:
+            exercise_count[num] += 1
+        else:
+            exercise_count[num] = 1
+           
+    for exercise in exercises:
+        test_number = 1
+        for test_key, arg1 in input_exo.items():
+
+            if exercise[-5:-3].endswith(test_key[:2]):
+                # print(f'{test_key[:2]}')
+                
+                print(f"Air{exercise[-5:-3]} {test_number:02d}/{exercise_count[exercise[-5:-3]]:02d} ",end=" ")
+
+                arg1 = input_exo.get(test_key,str)
+                # print(f'arg entré: {arg1}')
+                expected_result = output_exo.get(test_key, [str])
+                # print(f'attendu: {expected_result}')
+
+                arguments = ['python3', exercise, *arg1]
+                # print(arguments)
+
+                actual_output, error = execute_test(arguments)
+                # print(actual_output)
+
+                result = compare_result(actual_output, expected_result )
+                display_result(result)
+                success_count[test_key] = result
+                test_number += 1
+
+    print(f'Total success: {sum(success_count.values())}/{len(input_exo)}')
+
 if __name__ == "__main__":
-    unittest.main()
-   
-        # imported_module = __import__(module_name_complete)
-        # print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m')
-        # number_of_success+=1
-        # if module_name_complete("Bonjour les gars") == ["Bonjour","les", "gars"] :
-        #     i=2
-        #     print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m') 
-        # else:
-        #     i=2
-        #     print(f'{module_name_complete} ({i}/3) \033[31mFAILURE\033[0m')
-       
-       
-    # except (ModuleNotFoundError, ValueError):
-    #         print("\033[31merrorAir13\033[0m")
-
- # separator=[' ', '\t', '\n']
-        # value ="Bonjour les gars"
-        # if Air00.split_function(value,separator) == ["Bonjour", "les", "gars"]:
-        #     print(f'{module_name_complete} ({i}/3) \033[32mSUCCESS\033[0m')
-        #     number_of_sucess+=1
-        # else :
-        #     print(f'{module_name_complete} ({i}/3) \033[31mFAILURE\033[0m')
-        #    
-        
-# Gestion des erreurs 
-# def handle_error(): 
-#     if len(sys.argv) < 2 or not os.path.exists(user_value):
-#         quit_program()
-
-# Fonctions
-# def read_file(u_value): 
-#     with open(u_value, "r") as f:
-#         text = f.read()
-#         f.close
-#     return text
-
-# def quit_program():
-#     sys.exit("error")   
-
-# Résolution
-# handle_error()
-
-# Affichage Résultat
+    run_tests()
