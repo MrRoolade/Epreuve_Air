@@ -15,14 +15,10 @@ def execute_test(arg):
     return output, error
 
 def compare_result(output, expected):
-    r1 = output
-    r2 = "\n".join(expected)
     if isinstance(expected, str):
         # Si la valeur attendue est une chaîne, compare sans tenir compte des espaces et des retours à la ligne
-        # print(f'{output.strip()}\n= = =\n{expected.strip()}')
         return output.strip() == expected.strip()
     elif isinstance(expected, list):
-        # print(f'{r1}->\n{r2}')
         # Si la valeur attendue est une liste, compare les éléments après avoir joint avec des retours à la ligne
         return output.strip() == "\n".join(expected)
      
@@ -97,28 +93,16 @@ def run_tests():
     for exercise in exercises:
         test_number = 1
         for test_key, arg1 in input_exo.items():
-
             if exercise[-5:-3].endswith(test_key[:2]):
-                # print(f'{test_key[:2]}')
-                
                 print(f"Air{exercise[-5:-3]} {test_number:02d}/{exercise_count[exercise[-5:-3]]:02d} ",end=" ")
-
                 arg1 = input_exo.get(test_key,str)
-                # print(f'arg entré: {arg1}')
                 expected_result = output_exo.get(test_key, [str])
-                # print(f'attendu: {expected_result}')
-
                 arguments = ['python3', exercise, *arg1]
-                # print(arguments)
-
                 actual_output, error = execute_test(arguments)
-                # print(actual_output)
-
                 result = compare_result(actual_output, expected_result )
                 display_result(result)
                 success_count[test_key] = result
                 test_number += 1
-
     print(f'Total success: {sum(success_count.values())}/{len(input_exo)}')
 
 if __name__ == "__main__":
